@@ -154,7 +154,8 @@ p.lead{margin:0 0 8px;color:var(--muted);font-size:13.5px;max-width:60ch}
 @media (prefers-reduced-motion:no-preference){.main{scroll-behavior:smooth}}
 /* Leaflet 1.9.4 core styles (trimmed, inlined) */
 .leaflet-pane,.leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow,.leaflet-tile-container,.leaflet-pane>svg,.leaflet-pane>canvas,.leaflet-zoom-box,.leaflet-image-layer,.leaflet-layer{position:absolute;left:0;top:0}
-.leaflet-container{overflow:hidden;background:#e8e4da;-webkit-tap-highlight-color:transparent;font-family:var(--body);touch-action:none}
+.leaflet-container{overflow:hidden;background:#e8e4da;-webkit-tap-highlight-color:transparent;font-family:var(--body);touch-action:pan-y}.leaflet-container.free{touch-action:none}
+.mapwrap{position:relative}.maphint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);z-index:900;background:color-mix(in srgb,var(--panel) 88%,transparent);color:var(--muted);font:11px var(--mono);padding:4px 8px;border-radius:8px;pointer-events:none;white-space:nowrap}
 .leaflet-tile,.leaflet-marker-icon,.leaflet-marker-shadow{-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
 .leaflet-tile{filter:inherit;visibility:hidden}.leaflet-tile-loaded{visibility:inherit}
 .leaflet-zoom-box{width:0;height:0;box-sizing:border-box;z-index:800}
@@ -484,8 +485,8 @@ function doneKey(i){return `hm-done-${DAYS[dayIdx].n}-${i}`;}
 function renderDay(){
   const d=DAYS[dayIdx]; const isToday=dayIdx===tIdx;
   let h=`<div class="hero"><p class="date">Day ${d.n} · ${esc(d.date)}${isToday?" · today":""}</p><h2>${esc(d.title)}</h2><p class="base">${esc(d.base)}</p></div>`;
-  if(d.intro) h+=`<details class="plan intro"${ls("introOpen")==="0"?"":" open"} data-intro="1"><summary>About today's places</summary>${d.intro.map(p=>`<p>${esc(p)}</p>`).join("")}</details>`;
   if(d.flight){
+    if(d.intro) h+=`<details class="plan intro"${ls("introOpen")==="1"?" open":""} data-intro="1"><summary>About today's places</summary>${d.intro.map(p=>`<p>${esc(p)}</p>`).join("")}</details>`;
     h+=`<div class="flight"><div><b>Outbound</b>${esc(d.flight.out)}</div><div><b>Landing</b>${esc(d.flight.land)}</div><div><b>Before you go</b>${esc(d.flight.before)}</div><div><b>On the plane</b>${esc(d.flight.inflight)}</div></div>`;
     $("s-day").innerHTML=h; return;
   }
@@ -501,7 +502,8 @@ function renderDay(){
   if(d.note) h+=`<details class="plan"><summary>The day in one paragraph</summary><p>${esc(d.note)}</p></details>`;
   const links=dayLinks(d.stops);
   const hasL=typeof L!=="undefined";
-  h+=`<div class="card">${hasL?`<div class="mapwrap${mapBig?" big":""}"><div id="lmap"></div></div>`:renderMap(d.stops)}<div class="foot"><span>${d.stops.length} stops · tap a pin</span><span style="display:flex;gap:6px;flex-wrap:wrap">${hasL?(clusters(d).length>1?clusters(d).map((c,i)=>`<button type="button" class="btn sm" data-cl="${i}" aria-pressed="false">Stops ${c[0]+1}–${c[c.length-1]+1}</button>`).join(""):`<button type="button" class="btn sm" data-fit="1">Fit route</button>`)+`<button type="button" class="btn sm" data-big="1">${mapBig?"Smaller":"Bigger"}</button><button type="button" class="btn sm loc${geo.follow?" on":""}" data-loc="1" aria-pressed="${geo.follow}">${geo.denied?"Location off":geo.pos?(geo.follow?"Following":"Locate"):"Locate"}</button>`:""}${links.map((u,i)=>`<a class="btn sm" href="${u}" target="_blank" rel="noopener">Day${links.length>1?" "+(i+1):""} in Google Maps</a>`).join(" ")}</span></div></div>`;
+  h+=`<div class="card">${hasL?`<div class="mapwrap${mapBig?" big":""}"><div id="lmap"></div><div class="maphint"${mapBig?" hidden":""}>Tap a pin · “Move map” to pan and zoom</div></div>`:renderMap(d.stops)}<div class="foot"><span>${d.stops.length} stops · tap a pin</span><span style="display:flex;gap:6px;flex-wrap:wrap">${hasL?(clusters(d).length>1?clusters(d).map((c,i)=>`<button type="button" class="btn sm" data-cl="${i}" aria-pressed="false">Stops ${c[0]+1}–${c[c.length-1]+1}</button>`).join(""):`<button type="button" class="btn sm" data-fit="1">Fit route</button>`)+`<button type="button" class="btn sm" data-free="1" aria-pressed="${mapFree}">${mapFree?"Done moving":"Move map"}</button><button type="button" class="btn sm" data-big="1">${mapBig?"Smaller":"Bigger"}</button><button type="button" class="btn sm loc${geo.follow?" on":""}" data-loc="1" aria-pressed="${geo.follow}">${geo.denied?"Location off":geo.pos?(geo.follow?"Following":"Locate"):"Locate"}</button>`:""}${links.map((u,i)=>`<a class="btn sm" href="${u}" target="_blank" rel="noopener">Day${links.length>1?" "+(i+1):""} in Google Maps</a>`).join(" ")}</span></div></div>`;
+  if(d.intro) h+=`<details class="plan intro"${ls("introOpen")==="1"?" open":""} data-intro="1"><summary>About today's places</summary>${d.intro.map(p=>`<p>${esc(p)}</p>`).join("")}</details>`;
   h+=`<div class="offrow"><button type="button" class="btn sm" id="off-btn" data-offline="${ls('hm-offline-all')==='1'?'all':'day'}">${ls('hm-offline-all')==='1'?'Maps saved for the whole trip ✓':(ls('hm-offline-'+d.n)==='1'?'Maps saved for today ✓':'Save today\'s maps offline')}</button>${ls('hm-offline-all')==='1'?'':'<button type="button" class="btn sm ghost" data-offline="all">Whole trip</button>'}</div>`;
   h+=`<ol class="tl">`;
   d.stops.forEach((s,i)=>{
@@ -520,11 +522,12 @@ function renderDay(){
   $("s-day").innerHTML=h;
   if(hasL) initMap(d);
 }
-let lmap=null, mapBig=false;
+let lmap=null, mapBig=false, mapFree=false;
+function setMapLock(locked){ mapFree=!locked; if(!lmap) return; ["dragging","touchZoom","scrollWheelZoom"].forEach(k=>lmap[k]&&lmap[k][locked?"disable":"enable"]()); const c=lmap.getContainer(); c.classList.toggle("free",!locked); const b=document.querySelector("[data-free]"); if(b){ b.textContent=locked?"Move map":"Done moving"; b.setAttribute("aria-pressed",String(!locked)); } const w=document.querySelector(".maphint"); if(w) w.hidden=!locked; }
 function initMap(d){
   const el=$("lmap"); if(!el) return;
   if(lmap){ try{ lmap.remove(); }catch(e){} lmap=null; } try{ delete el._leaflet_id; }catch(e){} el.innerHTML="";
-  lmap=L.map(el,{zoomControl:true,attributionControl:false,tap:false}); L.control.attribution({prefix:false}).addTo(lmap);
+  lmap=L.map(el,{zoomControl:true,attributionControl:false,tap:false,dragging:false,touchZoom:false,scrollWheelZoom:false,boxZoom:false,keyboard:false}); setMapLock(!mapBig); L.control.attribution({prefix:false}).addTo(lmap);
   L.tileLayer(TILE_URL,{minZoom:9,maxZoom:19,maxNativeZoom:19,attribution:"© OpenStreetMap contributors",crossOrigin:true,errorTileUrl:"data:image/gif;base64,R0lGODlhAQABAIAAAOjk2gAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="}).addTo(lmap);
   lmap.on("moveend",()=>{if(geo.follow&&!geo.programmatic)setFollow(false);});
   geo.me=null; geo.ring=null;
@@ -584,7 +587,7 @@ function show(){
   $("h1").textContent=tab==="day"||tab==="finds"?DAYS[dayIdx].title:(tab==="book"?"Bookings":"Cards");
   $("main").scrollTop=0;
 }
-function setDay(i){dayIdx=Math.max(0,Math.min(DAYS.length-1,i));ls("hm-day",String(dayIdx));renderRail();show();}
+function setDay(i){dayIdx=Math.max(0,Math.min(DAYS.length-1,i));ls("hm-day",String(dayIdx));mapFree=false;renderRail();show();try{$("main").scrollTop=0;window.scrollTo(0,0);}catch(e){}}
 
 // ---------- events
 document.addEventListener("click",ev=>{
@@ -594,7 +597,8 @@ document.addEventListener("click",ev=>{
   if(ev.target.closest("[data-fit]")){fitRoute(DAYS[dayIdx]);return;}
   const clb=ev.target.closest("[data-cl]"); if(clb){fitRoute(DAYS[dayIdx],+clb.dataset.cl);return;}
   if(ev.target.closest("details[data-intro] summary")){setTimeout(()=>{const dd=document.querySelector("details[data-intro]");if(dd)ls("introOpen",dd.open?"1":"0");},0);return;}
-  if(ev.target.closest("[data-big]")){mapBig=!mapBig;const w=document.querySelector(".mapwrap");if(w){w.classList.toggle("big",mapBig);ev.target.textContent=mapBig?"Smaller":"Bigger";setTimeout(()=>{if(lmap){lmap.invalidateSize();fitRoute(DAYS[dayIdx]);}},280);}return;}
+  if(ev.target.closest("[data-free]")){setMapLock(mapFree);return;}
+  if(ev.target.closest("[data-big]")){mapBig=!mapBig;setMapLock(!mapBig);const w=document.querySelector(".mapwrap");if(w){w.classList.toggle("big",mapBig);ev.target.textContent=mapBig?"Smaller":"Bigger";setTimeout(()=>{if(lmap){lmap.invalidateSize();fitRoute(DAYS[dayIdx]);}},280);}return;}
   const jp=ev.target.closest("[data-jump]"); if(jp){ev.preventDefault();if(lmap)lmap.closePopup();const el=$("stop"+jp.dataset.jump);if(el){el.scrollIntoView({block:"center"});const c=el.querySelector(".stopcard");c.classList.add("open");c.setAttribute("aria-expanded","true");}return;}
   if(ev.target.closest("a")) return;
   const sc=ev.target.closest(".stopcard"); if(sc){sc.classList.toggle("open");sc.setAttribute("aria-expanded",sc.classList.contains("open"));return;}
@@ -603,10 +607,9 @@ document.addEventListener("click",ev=>{
 document.addEventListener("keydown",ev=>{if((ev.key==="Enter"||ev.key===" ")&&ev.target.classList&&ev.target.classList.contains("stopcard")){ev.preventDefault();ev.target.click();}});
 // swipe between days on the Day screen
 let sx=0,sy=0,st=0;
-$("main").addEventListener("touchstart",e=>{const t=e.touches[0];sx=t.clientX;sy=t.clientY;st=e.target.closest&&e.target.closest("#lmap")?0:Date.now();},{passive:true});
-$("main").addEventListener("touchend",e=>{if(tab!=="day"&&tab!=="finds")return;const t=e.changedTouches[0];const dx=t.clientX-sx,dy=t.clientY-sy;if(st&&Date.now()-st<600&&Math.abs(dx)>70&&Math.abs(dy)<50){setDay(dayIdx+(dx<0?1:-1));}},{passive:true});
+// (swipe between days removed: it flipped days while people scrolled)
 
-fmtClock(); setInterval(()=>{fmtClock(); if(tab==="day"&&dayIdx===tIdx&&!document.querySelector(".stopcard.open")&&!(lmap&&lmap._popup)) renderDay();},60000);
+fmtClock(); setInterval(()=>{fmtClock(); if(tab==="day"&&dayIdx===tIdx&&!document.querySelector(".stopcard.open")&&!(lmap&&lmap._popup)&&!mapFree){const d=DAYS[dayIdx];const mins=stopMins(d);const n=jpNow(),nowM=n.getHours()*60+n.getMinutes();let cur=-1;mins.forEach((m,i)=>{if(m!=null&&m<=nowM)cur=i;});if(cur!==d._cur) renderDay();}},60000);
 renderRail(); show();
 
 // ---------- hosted-app extras: location, offline maps, install, PIN
