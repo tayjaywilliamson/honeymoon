@@ -197,6 +197,27 @@ p.lead{margin:0 0 8px;color:var(--muted);font-size:13.5px;max-width:60ch}
 .pin.cur{background:var(--now)}.pin.done{background:var(--muted)}
 .spin{line-height:0;filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.45))}
 .lp b{display:block;font-size:14px;margin-bottom:2px}.lp .m{font-family:var(--mono);font-size:11px;color:var(--muted)}.lp .a{display:flex;gap:6px;margin-top:8px}.lp .a a{padding:5px 9px;border-radius:9px;border:1px solid var(--line);text-decoration:none;font-size:12.5px;color:var(--ink)}.lp .a a.p{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.pbmodes{display:flex;gap:6px;margin:4px 0 8px}
+.pbitem{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;display:grid;gap:3px;min-width:0}
+.pblist{display:grid;gap:8px;margin-top:10px}
+.pbitem .en{font-size:12.5px;color:var(--muted);display:flex;justify-content:space-between;gap:8px}
+.pbitem .en b{color:var(--fg);font-weight:600}
+.pbitem .ja{font:700 21px/1.35 "Hiragino Sans","Yu Gothic","Noto Sans JP",var(--body);color:var(--ink);overflow-wrap:anywhere}
+.pbitem .ro{font:500 13px var(--mono);color:var(--accent)}
+.pbitem .say,.pbitem .nt{font-size:12.5px;color:var(--muted)}
+.pbitem .nt{border-top:1px dashed var(--line);padding-top:5px;margin-top:3px}
+.pbitem .acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.pbok{font:500 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.pbcard{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:20px 16px;min-height:240px;display:grid;align-content:center;gap:8px;text-align:center;margin-top:10px}
+.pbcard .q{font:600 18px/1.35 var(--body);color:var(--ink)}
+.pbcard .ja{font:700 26px/1.35 "Hiragino Sans","Yu Gothic","Noto Sans JP",var(--body);color:var(--ink)}
+.pbcard .ro{font:500 14px var(--mono);color:var(--accent)}
+.pbcard .h{font-size:12.5px;color:var(--muted)}
+.pbrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px}
+.pbshow{position:fixed;inset:0;z-index:3000;background:var(--panel);display:grid;place-items:center;text-align:center;padding:max(24px,env(safe-area-inset-top,0px)) max(20px,env(safe-area-inset-right,0px)) max(24px,env(safe-area-inset-bottom,0px)) max(20px,env(safe-area-inset-left,0px))}
+.pbshow[hidden]{display:none}
+.pbsj{font:700 clamp(30px,9vw,60px)/1.35 "Hiragino Sans","Yu Gothic","Noto Sans JP",var(--body);color:var(--ink)}
+.pbse{margin-top:14px;color:var(--muted);font-size:14px}
 .me{width:18px;height:18px;border-radius:50%;background:#1a73e8;border:3px solid #fff;box-shadow:0 0 0 2px rgba(26,115,232,.35),0 1px 4px rgba(0,0,0,.4)}
 .btn.loc.on{background:#1a73e8;color:#fff;border-color:#1a73e8}
 .offrow{display:flex;gap:8px;margin:0 0 12px;flex-wrap:wrap}.btn.ghost{opacity:.75}
@@ -222,13 +243,16 @@ p.lead{margin:0 0 8px;color:var(--muted);font-size:13.5px;max-width:60ch}
     <section class="screen" id="s-finds" hidden></section>
     <section class="screen" id="s-book" hidden></section>
     <section class="screen" id="s-card" hidden></section>
+    <section class="screen" id="s-talk" hidden></section>
   </main>
   <nav class="tabs" aria-label="Sections">
     <button type="button" data-tab="day" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6-5.3-6-11a6 6 0 0 1 12 0c0 5.7-6 11-6 11z"/><circle cx="12" cy="10" r="2.2"/></svg>Day</button>
     <button type="button" data-tab="finds" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M12 2.6l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.4l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z"/></svg>Finds</button>
     <button type="button" data-tab="book" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Bookings</button>
+    <button type="button" data-tab="talk" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v10H9l-4 4v-4H4z"/><path d="M8 9h8M8 12h5"/></svg>Phrases</button>
     <button type="button" data-tab="card" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M7 11h6M7 15h10"/></svg>Card</button>
   </nav>
+<div class="pbshow" id="pbshow" hidden role="dialog" aria-modal="true" aria-label="Show this to staff"><div><div class="pbsj" id="pbshowJa" lang="ja"></div><div class="pbse" id="pbshowEn"></div><div class="pbrow"><button type="button" class="btn primary" id="pbshowPlay">Play</button><button type="button" class="btn" id="pbshowClose">Close</button></div></div></div>
 </div>
 
 <script>
@@ -472,7 +496,7 @@ function renderMap(stops){
 let dayIdx=0, tab="day", findGroup="all", findAll=false;
 const tIdx=todayIdx();
 {const saved=+ls("hm-day"); dayIdx=tIdx>=0?tIdx:(Number.isInteger(saved)&&saved>=0&&saved<DAYS.length?saved:1);}
-{const t=ls("hm-tab"); if(t&&["day","finds","book","card"].includes(t)) tab=t;}
+{const t=ls("hm-tab"); if(t&&["day","finds","book","card","talk"].includes(t)) tab=t;}
 
 function fmtClock(){const n=jpNow();const hh=n.getHours(),mm=String(n.getMinutes()).padStart(2,"0");const wd=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"][n.getDay()];$("clock").innerHTML=`${wd} <b>${hh}:${mm}</b> JST`;}
 
@@ -579,11 +603,11 @@ function renderCard(){
 }
 
 function show(){
-  ["day","finds","book","card"].forEach(k=>{$("s-"+k).hidden=k!==tab;});
+  ["day","finds","book","card","talk"].forEach(k=>{$("s-"+k).hidden=k!==tab;});
   document.querySelectorAll(".tabs button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.tab===tab?"true":"false"));
   $("rail").style.display=(tab==="day"||tab==="finds")?"flex":"none";
-  if(tab==="day")renderDay(); if(tab==="finds")renderFinds(); if(tab==="book")renderBook(); if(tab==="card")renderCard();
-  $("h1").textContent=tab==="day"||tab==="finds"?DAYS[dayIdx].title:(tab==="book"?"Bookings":"Cards");
+  if(tab==="day")renderDay(); if(tab==="finds")renderFinds(); if(tab==="book")renderBook(); if(tab==="card")renderCard(); if(tab==="talk")renderTalk();
+  $("h1").textContent=tab==="day"||tab==="finds"?DAYS[dayIdx].title:(tab==="book"?"Bookings":tab==="talk"?"Phrases":"Cards");
   $("main").scrollTop=0;
 }
 function setDay(i){dayIdx=Math.max(0,Math.min(DAYS.length-1,i));ls("hm-day",String(dayIdx));mapFree=false;renderRail();show();try{$("main").scrollTop=0;window.scrollTo(0,0);}catch(e){}}
@@ -609,6 +633,112 @@ let sx=0,sy=0,st=0;
 // (swipe between days removed: it flipped days while people scrolled)
 
 fmtClock(); setInterval(()=>{fmtClock(); if(tab==="day"&&dayIdx===tIdx&&!document.querySelector(".stopcard.open")&&!(lmap&&lmap._popup)&&!mapFree){const d=DAYS[dayIdx];const mins=stopMins(d);const n=jpNow(),nowM=n.getHours()*60+n.getMinutes();let cur=-1;mins.forEach((m,i)=>{if(m!=null&&m<=nowM)cur=i;});if(cur!==d._cur) renderDay();}},60000);
+// ---------- Phrases tab (from the Honeymoon Phrasebook)
+const PB_SECTIONS=[
+ ["basics","Basics"],["food","Restaurants"],["allergy","Nut allergy"],["shop","Shopping"],["move","Trains & taxis"],["hotel","Hotel & ryokan"],["kyoto","Temples & tea"],["help","If something goes wrong"]
+];
+const PB=[
+ ["basics","Hello (daytime)","こんにちは","konnichiwa","kohn-nee-chee-wah","Use from late morning to dusk. Shop staff greet you with irasshaimase; you don't need to answer it, a nod is fine."],
+ ["basics","Good morning","おはようございます","ohayō gozaimasu","oh-hah-yoh go-zai-mahss","The polite form. Ryokan and hotel staff will say it first."],
+ ["basics","Good evening","こんばんは","konbanwa","kohm-bahn-wah",""],
+ ["basics","Thank you very much","ありがとうございます","arigatō gozaimasu","ah-ree-gah-toh go-zai-mahss","The everyday polite thank you. Leaving a shop or restaurant, say it with a small nod."],
+ ["basics","Excuse me / sorry","すみません","sumimasen","soo-mee-mah-sen","The most useful word in Japan: to get a server's attention, to squeeze past someone, to apologize, and even as a thank-you when someone goes out of their way."],
+ ["basics","Please (when asking for something)","お願いします","onegai shimasu","oh-neh-guy shee-mahss","Add it after almost anything you point at or ask for."],
+ ["basics","No thank you / I'm fine","大丈夫です","daijōbu desu","dye-joh-boo dess","The soft way to decline a bag, a refill or an offer. Plain iie (no) can sound blunt."],
+ ["basics","Do you speak English?","英語は話せますか？","eigo wa hanasemasu ka?","ay-go wah hah-nah-seh-mahss kah",""],
+ ["basics","I don't understand","わかりません","wakarimasen","wah-kah-ree-mah-sen",""],
+ ["basics","One more time, please","もう一度お願いします","mō ichido onegai shimasu","moh ee-chee-doh oh-neh-guy shee-mahss",""],
+ ["basics","Slowly, please","ゆっくりお願いします","yukkuri onegai shimasu","yook-koo-ree oh-neh-guy shee-mahss","The double k is a tiny pause before the k."],
+
+ ["food","Two people, please","二人です","futari desu","foo-tah-ree dess","At the door. Holding up two fingers works too."],
+ ["food","We have a reservation, Williamson","予約しているウィリアムソンです","yoyaku shite iru Wiriamuson desu","yoh-yah-koo shteh ee-roo wee-ree-ah-moo-sohn dess","Show the confirmation on your phone at the same time."],
+ ["food","Counter seats, please","カウンター席でお願いします","kauntā-seki de onegai shimasu","kown-tah seh-kee deh oh-neh-guy shee-mahss","For sushi and tempura counters, where the chef serves you directly."],
+ ["food","Is there an English menu?","英語のメニューはありますか？","eigo no menyū wa arimasu ka?","ay-go noh meh-nyoo wah ah-ree-mahss kah",""],
+ ["food","What do you recommend?","おすすめは何ですか？","osusume wa nan desu ka?","oh-soo-soo-meh wah nahn dess kah",""],
+ ["food","This one, please","これをお願いします","kore o onegai shimasu","koh-reh oh oh-neh-guy shee-mahss","Point at the menu or the plastic food display."],
+ ["food","Water, please","お水をください","o-mizu o kudasai","oh-mee-zoo oh koo-dah-sai",""],
+ ["food","Cheers!","乾杯","kanpai","kahn-pie",""],
+ ["food","Said before eating","いただきます","itadakimasu","ee-tah-dah-kee-mahss","Hands together or a small nod, said quietly to each other. It means roughly 'I humbly receive'."],
+ ["food","It's delicious","おいしいです","oishii desu","oy-shee dess","Chefs at a counter love hearing it."],
+ ["food","Said after eating (thank you for the meal)","ごちそうさまでした","gochisōsama deshita","go-chee-soh-sah-mah desh-tah","Say it to the chef or staff on your way out. It lands better than any tip, and Japan has no tipping."],
+ ["food","The check, please","お会計お願いします","o-kaikei onegai shimasu","oh-kai-kay oh-neh-guy shee-mahss","Or cross your index fingers into an X, the local sign for the bill."],
+ ["food","Can I pay by card?","カードは使えますか？","kādo wa tsukaemasu ka?","kah-doh wah tsoo-kah-eh-mahss kah",""],
+
+ ["allergy","I have a tree-nut allergy","木の実（ナッツ類）のアレルギーがあります","ki no mi (nattsu-rui) no arerugī ga arimasu","kee noh mee (naht-tsoo roo-ee) noh ah-reh-roo-gee gah ah-ree-mahss","Tap Show to put it full-screen for the server. Same wording as the allergy card in the Day Guide."],
+ ["allergy","Does this have nuts in it?","これにナッツは入っていますか？","kore ni nattsu wa haitte imasu ka?","koh-reh nee naht-tsoo wah hite-teh ee-mahss kah","Point at the dish."],
+ ["allergy","Without nuts, please","ナッツ抜きでお願いします","nattsu nuki de onegai shimasu","naht-tsoo noo-kee deh oh-neh-guy shee-mahss",""],
+ ["allergy","Walnuts, almonds, pistachios, chestnuts","くるみ・アーモンド・ピスタチオ・栗","kurumi, āmondo, pisutachio, kuri","koo-roo-mee, ah-mohn-doh, pees-tah-chee-oh, koo-ree","Words to watch for on labels and menus. Chestnut (栗) and walnut (くるみ) show up often in autumn sweets."],
+ ["allergy","Is it OK for someone with a nut allergy?","ナッツアレルギーでも大丈夫ですか？","nattsu arerugī demo daijōbu desu ka?","naht-tsoo ah-reh-roo-gee deh-moh dye-joh-boo dess kah",""],
+
+ ["shop","How much is this?","これはいくらですか？","kore wa ikura desu ka?","koh-reh wah ee-koo-rah dess kah",""],
+ ["shop","I'm just looking","見ているだけです","mite iru dake desu","mee-teh ee-roo dah-keh dess",""],
+ ["shop","Can I try this on?","試着してもいいですか？","shichaku shite mo ii desu ka?","shee-chah-koo shteh moh ee dess kah","Fitting rooms often ask you to take off your shoes before stepping in."],
+ ["shop","Do you have a bigger size?","もっと大きいサイズはありますか？","motto ōkii saizu wa arimasu ka?","moht-toh oh-kee sai-zoo wah ah-ree-mahss kah","For smaller, swap in 小さい (chiisai, chee-sai)."],
+ ["shop","Tax-free, please","免税手続きをお願いします","menzei tetsuzuki o onegai shimasu","men-zay teh-tsoo-zoo-kee oh oh-neh-guy shee-mahss","Have your passport out. You pay full price and the tax comes back after the customs check at Haneda."],
+ ["shop","It's a gift, please wrap it","プレゼント用にお願いします","purezento-yō ni onegai shimasu","poo-reh-zen-toh yoh nee oh-neh-guy shee-mahss","Department stores wrap beautifully, usually for free."],
+ ["shop","No bag needed","袋は大丈夫です","fukuro wa daijōbu desu","foo-koo-roh wah dye-joh-boo dess","Bags cost a few yen at most shops."],
+
+ ["move","Where is ___?","___はどこですか？","___ wa doko desu ka?","___ wah doh-koh dess kah","Say the place name, then this. Pointing at the map on your phone helps."],
+ ["move","Where is the restroom?","お手洗いはどこですか？","o-tearai wa doko desu ka?","oh-teh-ah-rai wah doh-koh dess kah","Toire (トイレ) works too."],
+ ["move","To this address, please","この住所までお願いします","kono jūsho made onegai shimasu","koh-noh joo-shoh mah-deh oh-neh-guy shee-mahss","Show the Japanese address from the Card tab. Taxi doors open and close by themselves."],
+ ["move","Please stop here","ここで止めてください","koko de tomete kudasai","koh-koh deh toh-meh-teh koo-dah-sai",""],
+ ["move","Which platform for Kyoto?","京都行きは何番線ですか？","Kyōto-yuki wa nan-bansen desu ka?","kyoh-toh yoo-kee wah nahn bahn-sen dess kah","Swap in any station name."],
+ ["move","Does this train stop at ___?","この電車は___に止まりますか？","kono densha wa ___ ni tomarimasu ka?","koh-noh den-shah wah ___ nee toh-mah-ree-mahss kah",""],
+
+ ["hotel","Check-in, please","チェックインお願いします","chekku-in onegai shimasu","check-een oh-neh-guy shee-mahss",""],
+ ["hotel","We're on our honeymoon","新婚旅行中です","shinkon ryokō-chū desu","sheen-kohn ryoh-koh choo dess","Worth saying at check-in and at dinner counters."],
+ ["hotel","Could you keep our bags?","荷物を預かってもらえますか？","nimotsu o azukatte moraemasu ka?","nee-moh-tsoo oh ah-zoo-kaht-teh moh-rah-eh-mahss kah",""],
+ ["hotel","I'd like to send this luggage to Kyoto","この荷物を京都に送りたいです","kono nimotsu o Kyōto ni okuritai desu","koh-noh nee-moh-tsoo oh kyoh-toh nee oh-koo-ree-tai dess","For the bag forwarding on Nov 28 and Dec 3. Swap Kyoto for Tokyo (東京, toh-kyoh) on Dec 3."],
+ ["hotel","What time is breakfast?","朝食は何時からですか？","chōshoku wa nanji kara desu ka?","choh-shoh-koo wah nahn-jee kah-rah dess kah",""],
+ ["hotel","Excuse me for going first (bath, doorway)","お先に失礼します","o-saki ni shitsurei shimasu","oh-sah-kee nee shee-tsoo-ray shee-mahss","A polite thing to say when you leave the onsen or a room before others."],
+
+ ["kyoto","May I take a photo?","写真を撮ってもいいですか？","shashin o totte mo ii desu ka?","shah-sheen oh toht-teh moh ee dess kah","Ask before photographing maiko or inside temple halls; many halls say no."],
+ ["kyoto","Could you take our photo?","写真を撮ってもらえますか？","shashin o totte moraemasu ka?","shah-sheen oh toht-teh moh-rah-eh-mahss kah","Hand over the phone with the camera already open."],
+ ["kyoto","A temple seal, please","御朱印をお願いします","goshuin o onegai shimasu","go-shoo-een oh oh-neh-guy shee-mahss","Hand the seal book open to a blank page. Usually ¥300–500."],
+ ["kyoto","Tea ceremony: before you drink","お点前頂戴いたします","otemae chōdai itashimasu","oh-teh-mah-eh choh-dye ee-tah-shee-mahss","'I gratefully receive your tea.' Bow slightly, turn the bowl twice clockwise, then drink. The host will guide you."],
+ ["kyoto","Tea ceremony: to the guest after you","お先に頂戴します","o-saki ni chōdai shimasu","oh-sah-kee nee choh-dye shee-mahss","Said to the next guest before you take your sweet or tea."],
+
+ ["help","Help!","助けて！","tasukete!","tah-soo-keh-teh",""],
+ ["help","Please call an ambulance","救急車を呼んでください","kyūkyūsha o yonde kudasai","kyoo-kyoo-shah oh yohn-deh koo-dah-sai","Ambulance and fire: 119. Police: 110. Both have English support."],
+ ["help","I don't feel well","気分が悪いです","kibun ga warui desu","kee-boon gah wah-roo-ee dess",""],
+ ["help","We're lost","道に迷いました","michi ni mayoimashita","mee-chee nee mah-yoy-mahsh-tah","Any police box (交番, kōban) will help, and they're on most busy corners."],
+ ["help","I lost my phone / wallet","スマホ（財布）をなくしました","sumaho (saifu) o nakushimashita","soo-mah-hoh (sai-foo) oh nah-koo-shee-mahsh-tah","Lost items are very often handed in. Ask at the nearest station office or kōban."]
+];
+let pbMode="list", pbSec="all", pbDeck=[], pbI=0, pbRev=false, pbKnown={};
+try{pbKnown=JSON.parse(ls("pb-known")||"{}")||{};}catch(e){pbKnown={};}
+let pbVoice=null; const pbCan=typeof speechSynthesis!=="undefined";
+function pbPick(){try{const vs=speechSynthesis.getVoices();pbVoice=vs.find(v=>/^ja/i.test(v.lang)&&/Kyoko|O-ren|Google|Siri/i.test(v.name))||vs.find(v=>/^ja/i.test(v.lang))||null;}catch(e){}}
+if(pbCan){pbPick();try{speechSynthesis.onvoiceschanged=pbPick;}catch(e){}}
+function pbSay(text,slow){if(!pbCan)return;try{speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text.replace(/___/g,"、").replace(/[（）()]/g,"、"));u.lang="ja-JP";if(pbVoice)u.voice=pbVoice;u.rate=slow?0.6:0.9;speechSynthesis.speak(u);}catch(e){}}
+function pbItems(){return PB.map((p,i)=>({p,i})).filter(x=>pbSec==="all"||x.p[0]===pbSec);}
+function pbNewDeck(){const it=pbItems();const fresh=it.filter(x=>!pbKnown[x.i]);const a=(fresh.length?fresh:it).map(x=>x.i);for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]];}pbDeck=a;pbI=0;pbRev=false;}
+function renderTalk(){
+  let h=`<div class="pbmodes"><button type="button" class="chip" data-pbmode="list" aria-pressed="${pbMode==="list"}">All phrases</button><button type="button" class="chip" data-pbmode="practice" aria-pressed="${pbMode==="practice"}">Practice</button></div>`;
+  h+=`<div class="chips">${[["all","All"]].concat(PB_SECTIONS).map(([k,l])=>`<button type="button" class="chip" data-pbsec="${k}" aria-pressed="${pbSec===k}">${esc(l)}</button>`).join("")}</div>`;
+  if(pbMode==="list"){
+    h+=`<p class="lead">Play uses your phone's Japanese voice. Show puts a phrase full-screen for staff.</p><div class="pblist">`+pbItems().map(({p,i})=>{const [s,en,ja,ro,say,nt]=p;const k=!!pbKnown[i];return `<div class="pbitem"><div class="en"><b>${esc(en)}</b>${k?`<span class="pbok">Learned</span>`:""}</div><div class="ja" lang="ja">${esc(ja)}</div><div class="ro">${esc(ro)}</div><div class="say">Sounds like ${esc(say)}</div>${nt?`<div class="nt">${esc(nt)}</div>`:""}<div class="acts">${pbCan?`<button type="button" class="btn sm primary" data-pbplay="${i}">Play</button><button type="button" class="btn sm" data-pbslow="${i}">Slow</button>`:""}<button type="button" class="btn sm" data-pbshow="${i}">Show</button><button type="button" class="btn sm" data-pbknown="${i}">${k?"Learned ✓":"Mark learned"}</button></div></div>`;}).join("")+`</div>`;
+  } else {
+    if(!pbDeck.length) pbNewDeck();
+    if(pbI>=pbDeck.length){ h+=`<div class="pbcard"><div class="q">Round done.</div><div class="h">${Object.keys(pbKnown).length} of ${PB.length} phrases learned.</div><div class="pbrow"><button type="button" class="btn primary" data-pbround="1">Another round</button></div></div>`; }
+    else { const i=pbDeck[pbI]; const [s,en,ja,ro,say,nt]=PB[i];
+      h+=`<div class="pbcard"><div class="h">${pbI+1} / ${pbDeck.length}</div><div class="h">How do you say</div><div class="q">${esc(en)}</div>`+(pbRev?`<div class="ja" lang="ja">${esc(ja)}</div><div class="ro">${esc(ro)}</div><div class="h">Sounds like ${esc(say)}</div>`:`<div class="h">Say it out loud, then reveal.</div>`)+`</div><div class="pbrow">`+(pbRev?`${pbCan?`<button type="button" class="btn" data-pbplay="${i}">Play again</button>`:""}<button type="button" class="btn" data-pbnext="again">Again later</button><button type="button" class="btn primary" data-pbnext="got">Got it</button>`:`<button type="button" class="btn primary" data-pbreveal="1">Reveal</button>`)+`</div>`; }
+  }
+  $("s-talk").innerHTML=h;
+}
+document.addEventListener("click",ev=>{
+  const b=ev.target.closest("button"); if(!b) return; const d=b.dataset;
+  if(d.pbmode){pbMode=d.pbmode;if(pbMode==="practice")pbNewDeck();renderTalk();return;}
+  if(d.pbsec){pbSec=d.pbsec;if(pbMode==="practice")pbNewDeck();renderTalk();return;}
+  if(d.pbplay!==undefined){pbSay(PB[+d.pbplay][2],false);return;}
+  if(d.pbslow!==undefined){pbSay(PB[+d.pbslow][2],true);return;}
+  if(d.pbshow!==undefined){const p=PB[+d.pbshow];$("pbshowJa").textContent=p[2];$("pbshowEn").textContent=p[1]+" · "+p[3];$("pbshowPlay").dataset.pbplay=d.pbshow;$("pbshow").hidden=false;return;}
+  if(b.id==="pbshowClose"){$("pbshow").hidden=true;return;}
+  if(d.pbknown!==undefined){const i=d.pbknown;if(pbKnown[i])delete pbKnown[i];else pbKnown[i]=1;ls("pb-known",JSON.stringify(pbKnown));renderTalk();return;}
+  if(d.pbreveal){pbRev=true;renderTalk();pbSay(PB[pbDeck[pbI]][2],false);return;}
+  if(d.pbnext){const i=pbDeck[pbI];if(d.pbnext==="got"){pbKnown[i]=1;ls("pb-known",JSON.stringify(pbKnown));}else pbDeck.push(i);pbI++;pbRev=false;renderTalk();return;}
+  if(d.pbround){pbNewDeck();renderTalk();return;}
+});
+
 renderRail(); show();
 
 // ---------- hosted-app extras: location, offline maps, install, PIN
